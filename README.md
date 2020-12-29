@@ -1,8 +1,20 @@
-This is 3D Motion Art
+## This is 3D Motion Art
 
+##
+Requirements: 
+***
+node v12.18.3
 ## Getting Started
 
-First, run the development server:
+First, install your depedencies:
+
+```bash
+npm install
+# or
+yarn install
+```
+
+Second, start your development server:
 
 ```bash
 npm run dev
