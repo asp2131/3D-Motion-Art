@@ -6,13 +6,17 @@ import styles from '../styles/Home.module.css'
 
 export default function Home() {
   const [posesString, setPosesString] = useState([]);
-  const [nosePosition, setNosePosition] = useState({});
+  const [nosePosition, setNosePosition] = useState({
+    x: 100 - Math.random() * 200,
+    y: 100 - Math.random() * 200
+  });
 
   useEffect(() => {
     if(posesString[0]){
     //nose
     // console.log(posesString[0]["keypoints"][0].part); 
     let position = posesString[0]["keypoints"][0].position;
+    // console.log(100 - Math.random() * 200);
     setNosePosition(position);
     }
   }, [posesString]);
@@ -31,7 +35,7 @@ export default function Home() {
             setPosesString(poses);
           }}
         />
-        <Color />
+        <Color nosePosition={nosePosition}/>
       </main>
 
       <footer className={styles.footer}>

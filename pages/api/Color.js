@@ -14,15 +14,7 @@ const colors = [
   "lightpink",
   "lightblue",
 ];
-const random = (i) => {
-  const r = Math.random();
-  return {
-    position: [100 - Math.random() * 200, 100 - Math.random() * 200, i * 1.5],
-    color: colors[Math.round(Math.random() * (colors.length - 1))],
-    scale: [1 + r * 14, 1 + r * 14, 1],
-    rotation: [0, 0, THREE.Math.degToRad(Math.round(Math.random()) * 45)],
-  };
-};
+
 
 const data = new Array(number).fill().map(() => {
   return {
@@ -31,20 +23,29 @@ const data = new Array(number).fill().map(() => {
   };
 });
 
-function Content() {
+function Content({ nosePosition }) {
+  const random = (i) => {
+    const r = Math.random();
+    return {
+      position: [Math.round(nosePosition.x) - 250, Math.round(nosePosition.y) - 250, i * 1.5],
+      color: colors[Math.round(Math.random() * (colors.length - 1))],
+      scale: [1 + r * 14, 1 + r * 14, 1],
+      rotation: [0, 0, THREE.Math.degToRad(Math.round(Math.random()) * 45)],
+    };
+  };
+
   const [springs, set] = useSprings(number, (i) => ({
     from: random(i),
     ...random(i),
     config: { mass: 20, tension: 150, friction: 50 },
   }));
-  useEffect(
-    () =>
-      void setInterval(
-        () => set((i) => ({ ...random(i), delay: i * 40 })),
-        3000
-      ),
-    []
-  );
+  useEffect(() => {
+    void set((i) => ({ ...random(i), delay: i * 40 }), 3000);
+    // var highestTimeoutId = setTimeout(";");
+    // for (var i = 0; i < highestTimeoutId; i++) {
+    //   clearTimeout(i);
+    // }
+  }, [springs]);
   return data.map((d, index) => (
     <a.mesh key={index} {...springs[index]} castShadow receiveShadow>
       <boxBufferGeometry attach="geometry" args={d.args} />
@@ -76,11 +77,15 @@ function Lights() {
   );
 }
 
-export default function App() {
+export default function App({ nosePosition }) {
   return (
-    <Canvas shadowMap camera={{ position: [0, 0, 100], fov: 100 }}>
+    <Canvas
+      shadowMap
+      style={{ height: 500 }}
+      camera={{ position: [0, 0, 100], fov: 100 }}
+    >
       <Lights />
-      <Content />
+      <Content nosePosition={nosePosition}/>
     </Canvas>
   );
 }
